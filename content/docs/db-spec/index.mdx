@@ -1,0 +1,62 @@
+---
+title: Db Spec Introduction
+---
+
+# MySQL Development Standards
+
+## I. Standards
+
+1. Tables **must use the InnoDB storage engine**.
+
+2. Tables **must have a primary key**, preferably an **auto-incremented `bigint unsigned` type**.
+
+3. Tables and their corresponding fields **must have comments**, and names **must be meaningful**.
+
+4. Tables **must use the `utf8mb4` character set**, and fields **must not declare character sets individually**.
+
+5. **Do not use** views, stored procedures, functions, triggers, foreign keys, or events.
+
+6. **Do not use `enum` or `set` types**; use `tinyint(4)` instead.
+
+7. **Do not use `AFTER` or `FIRST`** when adding or modifying columns.
+
+8. **DDL operations on the same table must be combined into a single SQL statement**.
+
+9. **Do not use `SELECT *`**; all queried fields **must be explicitly listed**. Similarly, **`INSERT` statements must specify fields**.
+
+10. **Avoid JOIN queries involving more than three tables**; implement complex joins in the application code.
+
+11. **Large transactions are prohibited** in application code. Split them into smaller transactions and **execute in batches**.
+
+12. **Do not perform cross-database joins or updates**, to reduce coupling.
+
+13. **DDL deployments must occur during off-peak business hours**, and ideally **complete the day before code releases**.
+
+## II. Recommendations
+
+1. **Table names should be prefixed with `t_`**, index names with `idx_`, and unique indexes with `uqi_`.
+
+2. Avoid using **`TEXT` and `BLOB` data types**; store large files using alternative methods.
+
+3. **Each field should have `NOT NULL`** and **a default value**.
+
+4. **Limit indexes to no more than 5 per table**.
+
+5. When updating or deleting from a table, **prefer using primary keys or unique keys**.
+
+6. It is recommended to add the following two fields to every table, where:
+   - `create_time` is set during insertion and **never updated**.
+   - `update_time` is **automatically updated** on modification.
+
+   ```sql
+   `create_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) COMMENT 'Creation Time',
+   `update_time` datetime(6) NOT NULL DEFAULT current_timestamp(6) ON UPDATE current_timestamp(6) COMMENT 'Last Update Time'
+   ```
+
+7. Add an `is_deleted` field to implement **logical deletion**:
+
+   ```sql
+   `is_deleted` tinyint(4) DEFAULT 0 COMMENT 'Deletion Flag: 0 - Not Deleted, 1 - Deleted'
+   ```
+
+8. **Avoid storing sensitive information in plain text** (e.g., passwords, ID numbers, bank card numbers). Such data **should be encrypted or stored as hashes**.

@@ -1,0 +1,123 @@
+---
+title: Frontend Dev Project Structure
+---
+
+# Vue 3.0 Project Folder Structure Explanation
+
+Created by Qiu Lihua, last modified on Jun 19, 2023
+
+---
+
+## Root Structure
+
+- **node_modules**: Project dependencies
+- **public**: Static assets
+- **src**: Source code
+
+---
+
+## `src` Folder Details
+
+### assets
+
+- **assets/**: Resources used by the system
+- **base.css**: Base stylesheet
+- **logo.svg**: Project logo
+- **main.css**: Main stylesheet
+
+### common
+
+- **common/**: Shared utilities
+- **menuRoutesBuilder.ts**: Menu route builder
+- **nprogress.ts**: Page loading progress bar config
+- **utils.ts**: General utility functions
+
+### components
+
+- **components/**: Vue components
+
+### data
+
+- **data/**: Test/mock data
+- **menu.json**: Menu data
+
+### directives
+
+- **directives/**: Custom directives
+- **index.ts**: Directives entry point
+- **permission.ts**: Permission-related directive
+
+### layouts
+
+- **layouts/**: Layouts for different pages
+
+#### detail
+
+- **detail/index.vue**: Detail page layout component
+
+#### master
+
+- **master/components/**: Layout-related components
+  - **header.vue**: Header component
+  - **menu.vue**: Menu component
+  - **menuItems.vue**: Menu item component
+  - **taskbarTabs.vue**: Taskbar tabs
+- **master/index.vue**: Master layout component
+
+### mock
+
+- **mock/**: Mock data files
+- **index.js**: Entry point for mocks
+- **table.js**: Mock data for tables
+
+### network
+
+- **network/request.ts**: Encapsulation for AJAX requests
+
+### router
+
+- **router/routers/**: Route configuration files
+  - **firstPageRouter.ts**: First page route
+  - **lastPageRouter.ts**: Last page route
+  - **detailPageRouter.ts**: Detail page route
+- **router/index.ts**: Route entry point
+
+### stores
+
+- **stores/modules/**: Pinia/Vuex store modules
+  - **menu.ts**: Menu state
+  - **taskbarTabs.ts**: Taskbar tab state
+  - **user.ts**: User state
+- **stores/index.ts**: Store entry file
+
+### styles
+
+- **styles/**: Style files
+  - **crud.less**: CRUD styling
+  - **var.less**: Variables styling
+
+### views
+
+- **views/brand/index.vue**: Brand view page
+
+---
+
+## App Entry
+
+- **App.vue**: Main Vue component
+- **main.ts**: Vue app entry script
+
+---
+
+## Environment Configs
+
+- **.env.development**: Development config
+- **.env.production**: Production config
+- **.env.test**: Testing config
+- **.env.uat**: UAT (User Acceptance Testing) config
+
+---
+
+## HTML Entry
+
+- **index.html**: Main HTML entry file

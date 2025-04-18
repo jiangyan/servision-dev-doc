@@ -1,0 +1,16 @@
+{
+  "title": "Frontend Dev Spec",
+  "description": "Specifications for frontend development",
+  "root": true,
+  "order": 3,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "file-structure",
+    "framework-selection",
+    "developer-tools",
+    "---Download Large File---",
+    "download-node",
+    "download-html"
+  ]
+} 

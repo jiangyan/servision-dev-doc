@@ -1,0 +1,108 @@
+---
+title: Large File Download with Node.js and Express
+---
+
+# Chunked File Download (Frontend)
+
+Created by Qiu Lihua, last modified on Nov 16, 2023
+
+This HTML + JavaScript example demonstrates how to download a large file from the server **in chunks using HTTP Range requests**, assemble it in the browser, and trigger a download — all without requiring any backend-specific logic beyond range support.
+
+---
+
+## 🌐 HTML + JS Code
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chunked File Download</title>
+
+    <script>
+        const downloadFile = "output_with_watermark.pdf";
+
+        async function downloadFileInChunks(url, chunkSize) {
+            // Get file size
+            const fileSizeResponse = await fetch(url, { method: 'HEAD' });
+            const fileSize = parseInt(fileSizeResponse.headers.get('Content-Length'), 10);
+            const chunkCount = Math.ceil(fileSize / chunkSize);
+
+            // Create a readable stream
+            const readableStream = new ReadableStream({
+                async start(controller) {
+                    for (let i = 0; i < chunkCount; i++) {
+                        try {
+                            const start = i * chunkSize;
+                            const end = Math.min(start + chunkSize, fileSize) - 1;
+                            const chunkResponse = await fetch(url, {
+                                headers: {
+                                    'Range': `bytes=${start}-${end}`
+                                }
+                            });
+
+                            if (!chunkResponse.ok) {
+                                throw new Error(`Failed to fetch chunk ${i + 1}: ${chunkResponse.status} ${chunkResponse.statusText}`);
+                            }
+
+                            const chunk = await chunkResponse.arrayBuffer();
+                            controller.enqueue(new Uint8Array(chunk));
+                        } catch (error) {
+                            console.error(`Error fetching chunk ${i + 1}:`, error.message);
+                            i--; // Retry current chunk
+                        }
+                    }
+                    controller.close();
+                }
+            });
+
+            // Turn stream into Blob
+            const response = new Response(readableStream);
+            const blob = await response.blob();
+
+            // Create download link
+            const downloadUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = downloadFile; // File name
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Clean up
+            URL.revokeObjectURL(downloadUrl);
+        }
+    </script>
+</head>
+
+<body>
+    <button id="download">Download</button>
+</body>
+
+<script>
+    const btnDownload = document.getElementById('download');
+
+    btnDownload.addEventListener('click', () => {
+        // Start downloading with 1MB chunks
+        const size = 1024 * 1024;
+        downloadFileInChunks("/download/" + downloadFile, size);
+    });
+</script>
+
+</html>
+```
+
+---
+
+## ✅ Features
+
+- Downloads large files chunk-by-chunk
+- Supports network retries for failed chunks
+- Triggers download via browser once assembled
+- Fully client-side — no extra server dependencies needed (beyond HTTP range support)
+
+---
+

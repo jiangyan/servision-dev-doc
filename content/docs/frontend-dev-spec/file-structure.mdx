@@ -1,0 +1,75 @@
+---
+title: Frontend Project Naming Conventions
+---
+
+Created by Qiu Lihua, last modified on Jul 17, 2024
+
+This guide defines the naming standards for frontend projects across **Gitblit**, **Jenkins**, and **icon libraries**.
+
+---
+
+## 🔧 Gitblit Naming Rules
+
+Format:
+
+```
+f-pc/m/mp-[company/project prefix]-[project name]-[admin]
+```
+
+- `f`: Frontend project
+- `pc`: Desktop (PC) application
+- `m`: Mobile application
+- `mp`: Mini Program
+- `sgmw`: Main manufacturer or company name
+- `pac`: Project name
+- `admin`: Indicates it’s a backend admin system
+
+### Example:
+
+```
+f-pc-sgmw-pac-admin
+f-m-sgmw-pac-admin
+f-mp-sgmw-pac-admin
+```
+
+---
+
+## 🚀 Jenkins Naming Rules
+
+Follows the **same format** as Gitblit to allow quick matching when deploying projects.
+
+---
+
+## 🎨 Icon Library Naming Rules
+
+Format:
+
+```
+pc/m/mp-[company/project prefix]-[project name]-icons
+```
+
+- `icons`: Indicates this is an icon library
+
+### Example:
+
+```
+pc-sgmw-pac-icons
+m-sgmw-pac-icons
+mp-sgmw-pac-icons
+```
+
+---
+
+## 📌 Notes on the `admin` Suffix
+
+- Use `admin` suffix if the project is a **backend management system**.
+- Required for backend systems like:
+  ```
+  PACM, TACM, EPCM, EPLM, CMS...
+  ```
+- Not required for:
+  ```
+  PAC, EPC, TIS, EBOOK...
+  ```
+
+---

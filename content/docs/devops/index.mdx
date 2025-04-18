@@ -1,0 +1,60 @@
+---
+title: DevOps Introduction
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+# DevOps Standards
+
+Created by Zhang lele, last modified on Feb 21, 2022
+
+---
+
+## Host Naming
+
+> ℹ️Goal: By looking at the server name, one should know what type of machine it is, what environment it's in, and what it's used for.
+
+Use lowercase letters + numbers. Environment types include: `prod`, `uat`, `dev`, `ml`. Machine types: `ecs` (physical or cloud host), `vm` (virtual machine)
+
+### Naming Convention
+
+```
+sv-[machine type]-[environment]-[product abbreviation][serial number]
+```
+
+### Examples:
+
+- Alibaba Cloud production Oracle host: `sv-ecs-prod-oracle01`
+- Local environment test Oracle: `sv-vm-dev-oracle01`
+- Elasticsearch multi-nodes:  
+  - Master: `sv-vm-dev-es-master01`  
+  - Slaves: `sv-vm-dev-es-slave01`, `sv-vm-dev-es-slave02`
+- Kubernetes:
+  - `sv-[machine type]-[environment]-[product abbreviation][serial number]`
+  - Example: `sv-ecs-prod-k8s-node115`
+
+> Actually, using the `sv-` prefix uniformly is most readable. While starting fresh or doing a batch rename, it's best to place the environment in front. But in reality, machines are already provisioned with stuff and it's hard to standardize retroactively.
+
+---
+
+## O&M Guidelines
+
+- Do not perform downloads or traffic-heavy operations during peak hours, especially in the morning when business load is high.
+- Do not perform operations without approval. If a change affects SQL, notify the O&M personnel and execute only during scheduled windows.
+- If you can't access a system, contact the O&M person responsible for that system. If unavailable, you can escalate to the phone contact, but avoid pulling random people in unless necessary. If the main person can't be reached, contact their backup.
+
+---
+
+## Deployment Time
+
+Application releases should happen **after 6 PM**.  
+Special scenarios may allow release during the day, but approval is required.
+
+---
+
+## Online Operation Precautions
+
+<Callout type="warn" title="Caution">
+  Do not perform bandwidth-intensive actions such as downloads or file transfers during the morning peak hours; this may impact online services and cause slowdowns or unavailability.
+</Callout>
+

@@ -1,0 +1,95 @@
+---
+title: Large File Download with Node.js and Express
+---
+
+# Chunked File Download (Node Backend)
+
+Created by Qiu Lihua on Nov 16, 2023
+
+This example demonstrates how to implement chunked (range-based) file downloads using Node.js and Express. This is especially useful for downloading large files efficiently and supporting resume functionality in browsers.
+
+---
+
+## 📁 Folder Structure
+
+```
+project-root/
+├── files/             # Folder containing downloadable files
+├── view/
+│   └── index.html     # Frontend HTML file
+└── server.js          # Main Express backend script
+```
+
+---
+
+## 🚀 Server Code (`server.js`)
+
+```js
+const express = require('express');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+const port = 3000;
+
+// Serve static files from the 'view' folder
+app.use(express.static(path.join(__dirname, 'view')));
+
+// Serve index.html on root
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'view', 'index.html'));
+});
+
+// Chunked file download route
+app.get('/download/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'files', filename);
+
+    const stat = fs.statSync(filePath);
+    const fileSize = stat.size;
+    const range = req.headers.range;
+
+    if (range) {
+        // Parse the Range header
+        const parts = range.replace(/bytes=/, '').split('-');
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+
+        const chunkSize = end - start + 1;
+        const file = fs.createReadStream(filePath, { start, end });
+
+        const headers = {
+            'Content-Range': `bytes ${start}-${end}/${fileSize}`,
+            'Accept-Ranges': 'bytes',
+            'Content-Length': chunkSize,
+            'Content-Type': 'application/octet-stream',
+        };
+
+        res.writeHead(206, headers);
+        file.pipe(res);
+    } else {
+        // Full file download (no Range header)
+        const headers = {
+            'Content-Length': fileSize,
+            'Content-Type': 'application/octet-stream',
+        };
+
+        res.writeHead(200, headers);
+        fs.createReadStream(filePath).pipe(res);
+    }
+});
+
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+});
+```
+
+---
+
+## ✅ Features
+
+- Supports **HTTP range requests** for large files
+- Enables **pause/resume** download in modern browsers
+- Falls back to full download if no range header is provided
+
+---

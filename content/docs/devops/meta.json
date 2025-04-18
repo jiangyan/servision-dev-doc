@@ -1,0 +1,13 @@
+{
+  "title": "DevOps",
+  "description": "Specifications for DevOps practices",
+  "root": true,
+  "order": 6,
+  "pages": [
+    "---Introduction---",
+    "index",
+    "architecture",
+    "---Reference List---",
+    "reference-list"
+  ]
+} 
