@@ -1,4 +1,4 @@
-import { DocsLayout } from 'fumadocs-ui/layouts/docs';
+import { DocsLayout } from '@/components/layouts/docs';
 import type { ReactNode } from 'react';
 import { baseOptions } from '@/app/layout.config';
 import { source } from '@/lib/source';
@@ -22,17 +22,18 @@ export default function Layout({ children }: { children: ReactNode }) {
       tree={source.pageTree}
       {...baseOptions}
       sidebar={{
-        tabs: {
-          transform: (option) => {
+        tabs: { 
+          transform: (option: { url: string, title: ReactNode, [key: string]: any }) => { 
             const iconPath = getIconForUrl(option.url);
             return {
               ...option,
+              url: option.url || '',
               icon: iconPath ? (
                 <Image src={iconPath} alt="" width={20} height={20} />
               ) : undefined,
             };
           },
-        },
+        }
       }}      
     >
       {children}

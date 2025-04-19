@@ -1,6 +1,6 @@
 {
-  "title": "Db Spec",
-  "description": "Specifications for database design and usage",
+  "title": "Database",
+  "description": "Database guidelines & standards",
   "root": true,
   "order": 5
 } 

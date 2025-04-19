@@ -15,27 +15,27 @@ export default function HomePage() {
       <h2 className="mb-4 text-2xl font-semibold">Explore the Guidelines</h2>
       <Cards className="mt-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
         <Card
-          title="Tech Stacks"
+          title="Tech Stack"
           description="Overview of approved technologies and frameworks."
           href="/docs/tech-stacks"
         />
         <Card
-          title="Project Dev Spec"
-          description="General project development processes and standards."
+          title="Product & Project"
+          description="General product/project development processes and standards."
           href="/docs/project-dev-spec"
         />
         <Card
-          title="Frontend Dev Spec"
+          title="Frontend Dev"
           description="Specific guidelines for frontend development."
           href="/docs/frontend-dev-spec"
         />
         <Card
-          title="Backend Dev Spec"
+          title="Backend Dev"
           description="Specific guidelines for backend development (Java)."
           href="/docs/backend-dev-spec"
         />
         <Card
-          title="Db Spec"
+          title="Database"
           description="Database design standards and usage guidelines."
           href="/docs/db-spec"
         />

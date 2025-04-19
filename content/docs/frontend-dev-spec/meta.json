@@ -1,6 +1,6 @@
 {
-  "title": "Frontend Dev Spec",
-  "description": "Specifications for frontend development",
+  "title": "Frontend Dev",
+  "description": "Frontend development guidelines & standards",
   "root": true,
   "order": 3,
   "pages": [

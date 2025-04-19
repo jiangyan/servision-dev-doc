@@ -1,6 +1,6 @@
 {
-  "title": "Backend Dev Spec",
-  "description": "Specifications for backend development",
+  "title": "Backend Dev",
+  "description": "Backend development guidelines & standards",
   "root": true,
   "order": 4
 } 
