@@ -1,7 +1,126 @@
 ---
-title: Project Dev Spec Introduction
+title: Project Development Workflow
 ---
 
-# Project Dev Spec
+# Product Project Development Workflow
 
-This section covers the project development specifications. 
+Created by Jiang Yan, last modified on Oct 18, 2023
+
+This product development workflow is based on the **Agile Scrum methodology**.
+
+---
+
+## 🧰 Tools
+
+First and foremost, a **task management tool** is needed to track and manage all tasks. Common tools include:
+
+- ZenTao (禅道)
+- Jira
+- GitHub Projects
+
+> We use **ZenTao** as our main tool for product and project management.
+
+---
+
+## 🔁 Development Process (Based on Scrum)
+
+Product and project tasks are broken down and executed in **Sprints** (iterations). Each Sprint is a focused development cycle with clear goals.
+
+---
+
+### 1. 🗓 Sprint Planning
+
+- **Term:** `Product Backlog` (Requirement Pool)
+- Before each new Sprint starts, the Product Manager must ensure the backlog contains at least **two weeks’ worth of tasks**.
+
+---
+
+### 2. 🧾 Sprint Meeting (Task & Requirement Clarification)
+
+Deliverables before Sprint begins:
+
+- Requirement document
+- Prototype design
+- Decompose features into tasks in ZenTao
+- Define **task priority**
+
+> 🛠 Product and project staff should finalize these items before the Sprint begins, enabling developers to start effectively.
+
+---
+
+### 3. 🧱 Technical Standards Review
+
+Before the **first Sprint**, the development team should confirm and enforce **product technical architecture standards** according to the roles below.
+
+| Area                | Responsible Person(s) |
+|---------------------|------------------------|
+| Frontend Architecture | Qiu Lihua |
+| Backend Architecture  | Zhang Lele, Chen Yudong, Mo Jianlan, Fu Zhangbing — Backends follow standards per product |
+| UI Design & Interaction | Product Owner (Chen Ran, Xie Labing) — If the vendor has their own UI standards, follow those |
+| Testing | Wang Fengying — Ensure all technical standards are checked and confirmed via checklist |
+
+> 📋 Refer to the “Product Technical Standards” document for detailed items.
+
+---
+
+### 4. 💻 Development & Testing
+
+Once the Sprint starts, developers begin implementing high-priority `TODO` tasks from ZenTao, following priority order.
+
+> Standard dev & test processes apply here — not repeated.
+
+---
+
+### 5. 🚀 Release
+
+#### Release Participants:
+
+- **Developers (Dev: frontend & backend)**  
+  Ensure functional implementation is correct.
+
+- **QA (Testers)**  
+  Validate the interface functionality, flow, and data correctness.
+
+- **Product / Project Manager**  
+  Confirm success (or failure/rollback) from a **user’s perspective**.
+
+- **Release Manager**  
+  Execute the release and ensure successful deployment.
+
+---
+
+### 6. 🤝 Daily Standup Meetings
+
+Optional — based on team needs.
+
+- Short daily meetings to share:
+  - What was done yesterday
+  - What will be done today
+  - Any blockers or issues
+
+> Helps surface problems early instead of discovering them at the last minute.
+
+---
+
+## 📌 Summary & Reflection
+
+Scrum isn't mandatory, but this kind of workflow is **fundamental and necessary**:
+
+- ✅ Every version must have a **clear release plan** with listed tasks
+- ✅ Developers and testers must know **task details**
+- ✅ Track task status clearly from `TODO → IN PROGRESS → DONE`
+- ✅ Communicate **regularly and frequently** to surface problems early
+- ✅ Conduct **post-mortems** to reflect and improve
+
+---
+
+## 🔍 Before Starting a New Product or Delivery
+
+Every product, project, and dev lead should ask themselves:
+
+- Have we used a **task management tool** to organize all tasks?
+- Is there a **clear plan** that everyone understands?
+- Do the responsible people **fully understand the task details**?
+- Are there **any blockers** when completing the tasks?
+
+---

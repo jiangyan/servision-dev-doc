@@ -1,0 +1,229 @@
+---
+title: Internal API Specification
+---
+
+# Frontend-Backend API Specification (2022 Edition)
+
+Created by Zhang Lele, last modified on Oct 26, 2023
+
+---
+
+## 📌 Current Issues
+
+- Not compatible with Swagger for auto-generating useful docs, especially for **query interfaces**, which lack clarity on `args` fields and require manual filling.
+- **Encoding/decoding** of query interface definitions makes **reuse and cross-service invocation difficult**.
+- **Not suitable for exposing directly to third-party clients**.
+- Previously, only **query APIs** were defined. **Create/Update/Delete** operations lack standardized definitions.
+- No **unified error code system** for inter-service error tracing, making debugging time-consuming.
+- Lacks **built-in parameter validation** mechanisms.
+- **No ongoing maintenance** of the spec — this needs active follow-up.
+
+---
+
+## 🌐 General API Principles
+
+- Under the premise of convenience and consistency, strive to be **as RESTful as possible**.
+
+---
+
+## 🔍 Query API Patterns
+
+### ✅ Simple Query
+
+```
+GET /parts/{id}
+```
+
+### ✅ Complex Query
+
+Example:
+
+```
+GET /parts?partCode=P01&partName=发动机&page=1&pageSize=20&ordering=partCode,-partName
+```
+
+#### Explanation:
+
+| Type             | Example                                  |
+|------------------|-------------------------------------------|
+| Equality         | `partCode=P01`                            |
+| Range            | `partCode_lt=20`, `partCode_gt=10`        |
+| Date             | `createdDate=YYYY-MM-DDTHH:mm:ss.sssZ` or timestamp |
+| Fuzzy Search     | `keyword=xxx`                             |
+| Multi-value      | `partCode=P01,P02`                        |
+| Single-value     | `partCode=P01`                            |
+
+> 🚧 Note: Though it gives control to the frontend, filtering logic can stay on the backend for simplicity.
+
+#### Pagination:
+
+- `page`: requested page number (default: `1`)
+- `pageSize`: number of items per page (default: `20`)
+
+#### Sorting:
+
+- `ordering`: fields to sort by, e.g. `partCode`, `-partName` (prefix `-` for descending)
+
+> For report-like queries, frontend can control filtering. If backend performance is affected, consider moving fixed reports to a dedicated **report module**.
+
+> For overly long `GET` URLs, switch to `POST` to avoid issues like NGINX interception and to improve cacheability. (**TODO**)
+
+---
+
+## 📦 Response Structure
+
+### ✅ Common Fields
+
+- `code`: Business-level status code  
+  - Examples:
+    - `H200`: Success
+    - `B50001`: Backend business error
+    - `C100`: Frontend parsing error
+
+- `message`:  
+  - Should always be **user-friendly and display-ready**.
+  - Internally, errors should be mapped from a table with developer messages + user messages.
+
+| Code     | Dev Message                    | User Message                          | Trace |
+|----------|--------------------------------|----------------------------------------|--------|
+| B50001   | Failed to get part number (Redis down) | Part creation failed, contact admin | xxx    |
+| B50002   | Failed to create part (DB down)        | Part creation failed, contact admin | xxxx   |
+
+### ✅ HTTP Status Mapping
+
+- Success: `200`
+- Authentication failed: `401`
+- Authorization failed: `403`
+- Business logic error: `599`
+
+---
+
+### 🧾 Paged Response
+
+```json
+{
+  "code": "",
+  "message": null,
+  "total": 2000,
+  "list": [
+    { "code": "p10", "partName": "发动机" },
+    { "code": "p10", "partName": "发动机" }
+  ]
+}
+```
+
+### 📄 Non-Paged Response
+
+```json
+{
+  "code": "",
+  "message": null,
+  "list": [
+    { "code": "p10", "partName": "发动机" },
+    { "code": "p10", "partName": "发动机" }
+  ]
+}
+```
+
+### ❌ Error Response
+
+```json
+{
+  "code": "B50001",
+  "message": "服务器忙，请稍后重试",
+  "list": []
+}
+```
+
+### 🚫 Unauthorized Response
+
+```http
+HTTP_STATUS = 403
+```
+
+```json
+{
+  "code": "H403",
+  "message": "无此权限",
+  "list": []
+}
+```
+
+---
+
+## ✍️ Create / Edit / Delete Operations
+
+All create/update/delete should be **`POST`** requests.
+
+### ➕ Create
+
+```http
+POST /parts
+```
+
+```json
+{
+  "partCode": "P01",
+  "partName": "发动机"
+}
+```
+
+### ✏️ Edit (Full Update)
+
+```http
+POST /parts/{id}
+```
+
+```json
+{
+  "id": "1",
+  "partCode": "P01",
+  "partName": "发动机"
+}
+```
+
+### ❌ Delete (Batch or Single)
+
+```http
+POST /parts/delete
+```
+
+```json
+["id1", "id2", "id3"]
+```
+
+> Using RESTful paths like `/parts` + method is preferred over `/parts/create` or `/parts/add`, which vary by developer habits. Now that **authorization is bound to URI + method**, a RESTful structure brings consistency.
+
+---
+
+## 📤 Export
+
+### Request:
+
+```http
+GET /parts/export?partCode=P01&partName=发动机&page=1&pageSize=20&ordering=partCode,-partName&field=a,b,c
+```
+
+- Frontend must **specify which fields to export**
+- Consider integrating this into a **report center**
+
+### Response:
+
+- Do **not** return file stream directly
+- Return a downloadable `res` link
+- Frontend handles the file download
+
+---
+
+## 📦 Import
+
+> **Pending specification**
+
+---
+
+## 🌍 GraphQL (For Consumer-Facing Apps)
+
+For C-end applications like mobile apps, **GraphQL** is more suitable for aggregating data from multiple services.  
+Standard for GraphQL-based APIs is **TBD**.
+
+---

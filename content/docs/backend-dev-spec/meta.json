@@ -2,5 +2,12 @@
   "title": "Backend Dev",
   "description": "Backend development guidelines & standards",
   "root": true,
-  "order": 4
+  "order": 4,
+  "pages": [
+    "---Java Coding Style Guide---",
+    "index",
+    "---API Specification---",
+    "internal-interface",
+    "interface-version"
+  ]
 } 

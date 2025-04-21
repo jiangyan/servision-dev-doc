@@ -1,0 +1,87 @@
+---
+title: API Version Management Plan
+---
+
+# API Version Management Plan
+
+Created by webmaster, last modified by Zhang Lele on Oct 31, 2024
+
+This document outlines the main approaches for managing API versions in production systems.
+
+---
+
+## 📌 Common Versioning Methods
+
+| Method | Example | Notes |
+|--------|---------|-------|
+| **Path-based versioning** (Recommended) | `www.example.com/v1/api/example` | Most commonly used and versioned explicitly in the URL |
+| **Query parameter versioning** | `api.example.com/api?version=v1&...` | **Not recommended** — less visible and harder to cache |
+| **Header-based versioning** | Custom header: `X-API-VERSION: v1` | Easy to implement; requires client to set headers correctly |
+| **Subdomain-based versioning** | `v1.api.example.com` | Useful for long-term multi-version coexistence via separate deployments |
+
+---
+
+## ☕ Java Spring-Based Implementation
+
+### ✅ 1. **Path-Based Versioning** (Recommended)
+
+- Version info is embedded directly into the URL path, such as:
+
+```
+www.example.com/v1/api/example
+```
+
+- Suggested for clarity and compatibility with documentation tools like Swagger.
+
+- Reference: [API versioning strategy (by HiFreud)](https://www.hifreud.com/2018/01/30/01-API-versioning/)
+
+---
+
+### ⚠️ 2. **Query Parameter Versioning**
+
+```
+api.example.com/api?version=v1&...
+```
+
+- **Not recommended**
+- Less readable, less cacheable, more error-prone in complex scenarios
+
+---
+
+### 🔧 3. **Header-Based Versioning**
+
+- Simple to implement
+- Used in previous mobile app projects
+- Requires clients (e.g., app) to set headers properly
+
+#### Spring Example:
+
+```java
+@RestController
+@RequestMapping(value = "/search", headers = "X-API-VERSION=v1")
+public class SearchController extends BaseDataController {
+   ...
+}
+```
+
+> 🔍 Pros: Easy to implement  
+> ⚠️ Cons: Less visible and less flexible than path-based versioning
+
+---
+
+### 🗂️ 4. **Subdomain-Based Versioning**
+
+- Example: `v1.api.example.com`
+- Each version is deployed independently, suitable for **multi-version long-term maintenance**
+- Requires **separate codebases or branches**
+- Most suitable when version count is low and isolated maintenance is preferred
+
+---
+
+## ⚠️ Important Considerations
+
+- **Limit the number of coexisting API versions**
+  - Too many versions increase maintenance cost and complexity
+  - Encourage clients to upgrade to newer versions where possible
+
+---
